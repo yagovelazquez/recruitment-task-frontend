@@ -1,0 +1,19 @@
+[
+  {
+    "isActive": true,
+    "balance": "1,511.15",
+    "picture": "http://placehold.it/32x32",
+    "age": 39,
+    "gender": "male",
+    "firstName": "Katie",
+    "lastName": "Dickson",
+    "email": "katiedickson@futurize.com",
+    "phone": "+1 (937) 451-3041",
+    "company": "BITREX",
+    "address": "978 Wallabout Street, Roberts, Alaska, 1955",
+    "about": "Quis quis quis reprehenderit id anim sint culpa. Commodo amet Lorem cillum quis ullamco. Ad mollit commodo Lorem eu do culpa amet id cillum mollit. Cupidatat cupidatat adipisicing in mollit Lorem elit adipisicing voluptate eu fugiat esse ut. Excepteur voluptate laborum nostrud nostrud ullamco velit aute enim voluptate dolor mollit ullamco.\r\n",
+    "registered": "2015-10-20T06:49:58 -02:00",
+    "latitude": 32.225743,
+    "longitude": -88.828559
+  }
+]
