@@ -15,7 +15,8 @@ const processDataKeyValue = (
 
   if (typeof value === 'object' && value !== null) {
     return Object.keys(value).reduce((result, key) => {
-      const transformedKey = excludedKeys?.includes(key) ? key : snakeCase(key);
+      console.log(snakeCase(key))
+      const transformedKey = excludedKeys?.includes(key) ? key : func(key);
       const transformedValue = processDataKeyValue(
         value[key],
         func,
@@ -33,7 +34,7 @@ export const camelizeData = <T extends Record<string, any>>(data: T | T[],exclud
     return data.map((item) => camelizeData(item, excludedKeys)) as T[];
   }
 
-  const camelizedData = processDataKeyValue(data, camelizeData, excludedKeys);
+  const camelizedData = processDataKeyValue(data, camelCase, excludedKeys);
   return camelizedData as T;
 };
 

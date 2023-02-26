@@ -2,8 +2,12 @@ import { filesize } from 'filesize';
 import { FC, useCallback, useState } from 'react';
 import Button from '../../shared/components/Button/Button';
 import { Dropzone } from '../../shared/components/Dropzone/Dropzone';
-import { readJsonFile } from '../../shared/components/helpers/files';
-import { snakizeData } from '../../shared/components/helpers/data';
+import { readJsonFile } from '../../shared/helpers/files';
+import { snakizeData } from '../../shared/helpers/data';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { request } from '../../shared/client/baseClient';
+import { customersClient } from '../../shared/client/customers/customersClient';
+import { cacheKeys } from '../../config';
 
 interface FileUploadProps {
   // TODO: Add prop types
@@ -28,10 +32,13 @@ export interface IFileUpload {
 }
 
 const FileUpload: FC<FileUploadProps> = () => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [jsonData, setJsonData] = useState<unknown | null>(null);
-
   const [fileUploaded, setFileUploaded] = useState<IFileUpload>();
+
+  const { mutateAsync: createCustomersMutation, data: createCustomersData } = useMutation(customersClient.createCustomers);
+
+
+
+  console.log(createCustomersData)
 
   const dropHandler = useCallback(({ file, isAccepted }: { file: File; isAccepted: boolean }) => {
       if (!file) return;
@@ -52,6 +59,8 @@ const FileUpload: FC<FileUploadProps> = () => {
     const obj = await readJsonFile(fileUploaded?.file!)
   //@ts-ignore
     console.log(snakizeData(obj, ["_id"]))
+      //@ts-ignore
+    createCustomersMutation(snakizeData(obj, ["_id"]))
   };
 
   return (
