@@ -2,6 +2,8 @@ import { filesize } from 'filesize';
 import { FC, useCallback, useState } from 'react';
 import Button from '../../shared/components/Button/Button';
 import { Dropzone } from '../../shared/components/Dropzone/Dropzone';
+import { readJsonFile } from '../../shared/components/helpers/files';
+import { snakizeData } from '../../shared/components/helpers/data';
 
 interface FileUploadProps {
   // TODO: Add prop types
@@ -45,8 +47,11 @@ const FileUpload: FC<FileUploadProps> = () => {
     []
   );
 
-  const saveFileHandler = () => {
-    console.log(fileUploaded)
+  const saveFileHandler = async () => {
+
+    const obj = await readJsonFile(fileUploaded?.file!)
+  //@ts-ignore
+    console.log(snakizeData(obj, ["_id"]))
   };
 
   return (
@@ -58,7 +63,7 @@ const FileUpload: FC<FileUploadProps> = () => {
       acceptedFileExtentions={acceptedFileExtentions}
       dropZoneMsgs={dropZoneMsgs}
     />
-    <Button className='self-end' onClick={saveFileHandler}>Save</Button>
+    {fileUploaded?.file && <Button className='self-end' onClick={saveFileHandler}>Save</Button>}
     </div>
   );
 };
