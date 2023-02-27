@@ -24,10 +24,11 @@ export const getDragVariant = ({
 };
 
 export const getDropzoneContainerClassName = (variant: DragVariant) => {
-  const sharedStyles = 'rounded-md min-h-0 flex items-center justify-center flex-col gap-2 h-40 cursor-pointer relative shadow-lg'
+  const sharedStyles =
+    'rounded-md min-h-0 flex items-center justify-center flex-col gap-2 h-40 cursor-pointer relative shadow-lg';
   const defaultStyles = 'bg-white/20 text-white';
-  const acceptedStyles = 'bg-teal-100 text-teal-500';
-  const rejectedStyles = "text-rose-500 bg-rose-200/60";
+  const acceptedStyles = 'bg-teal-100/70 text-teal-500';
+  const rejectedStyles = 'text-rose-500 bg-rose-200/60';
 
   switch (variant) {
     case DragVariant.Drag:

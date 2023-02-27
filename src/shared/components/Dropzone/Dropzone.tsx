@@ -5,7 +5,6 @@ import DropzoneMessage from './DropzoneMessage';
 import { IDropzone } from './Dropzone.types';
 import DropzoneContainer from './DropzoneContainer';
 
-
 export const Dropzone: FC<IDropzone> = ({
   dropZoneMsgs,
   onDrop,
@@ -14,20 +13,18 @@ export const Dropzone: FC<IDropzone> = ({
   acceptedFileExtentions,
   maxFiles = 1,
 }) => {
-
   return (
     <ReactDropzone
-      onDrop={([acceptedFile]) => onDrop({ file: acceptedFile, isAccepted: true })}
+      onDrop={([acceptedFile]) =>
+        onDrop({ file: acceptedFile, isAccepted: true })
+      }
       accept={acceptedFileExtentions}
       maxFiles={maxFiles}
-      onDropRejected={([{ file }]) => onFileReject({ file: file, isAccepted: false })}
+      onDropRejected={([{ file }]) =>
+        onFileReject({ file: file, isAccepted: false })
+      }
     >
-      {({
-        getRootProps,
-        getInputProps,
-        isDragActive,
-      }) => {
-
+      {({ getRootProps, getInputProps, isDragActive }) => {
         const dragVariant = getDragVariant({
           isDragActive,
           fileUploaded,
@@ -35,7 +32,7 @@ export const Dropzone: FC<IDropzone> = ({
 
         return (
           <DropzoneContainer {...getRootProps()} variant={dragVariant}>
-            <input {...getInputProps()}/>
+            <input {...getInputProps()} />
             <DropzoneMessage
               variant={dragVariant}
               dropZoneMsgs={dropZoneMsgs}

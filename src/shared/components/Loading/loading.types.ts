@@ -1,3 +1,3 @@
 export interface LoadingSpinnerModalProps {
-      isLoading: boolean;
-  }
+  isLoading: boolean;
+}

@@ -1,17 +1,15 @@
 import { filesize } from 'filesize';
-import { FC, useCallback, useState } from 'react';
+import { Fragment, useCallback, useState } from 'react';
 import Button from '../../shared/components/Button/Button';
 import { Dropzone } from '../../shared/components/Dropzone/Dropzone';
 import { readJsonFile } from '../../shared/helpers/files';
 import { snakizeData } from '../../shared/helpers/data';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { request } from '../../shared/client/baseClient';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { customersClient } from '../../shared/client/customers/customersClient';
+import { useNavigate } from 'react-router-dom';
+import GoBackButton from '../../shared/components/Button/GoBackButton';
+import { IFileUpload } from './FileUpload.types';
 import { cacheKeys } from '../../config';
-
-interface FileUploadProps {
-  // TODO: Add prop types
-}
 
 const dropZoneMsgs = {
   dropZoneMsg: 'Drag and drop your json file in this area',
@@ -23,24 +21,22 @@ const acceptedFileExtentions = {
   'application/json': ['.json'],
 };
 
-export interface IFileUpload {
-  name: string;
-  readableSize: number;
-  file: File;
-  type: string;
-  isAccepted: boolean;
-}
-
-const FileUpload: FC<FileUploadProps> = () => {
+const FileUpload = () => {
   const [fileUploaded, setFileUploaded] = useState<IFileUpload>();
+  const queryClient = useQueryClient();
 
-  const { mutateAsync: createCustomersMutation, data: createCustomersData } = useMutation(customersClient.createCustomers);
+  const { mutateAsync: createCustomersMutation } = useMutation(
+    customersClient.createCustomers,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([cacheKeys.customers.getCustomers]);
+      },
+    }
+  );
+  const navigate = useNavigate();
 
-
-
-  console.log(createCustomersData)
-
-  const dropHandler = useCallback(({ file, isAccepted }: { file: File; isAccepted: boolean }) => {
+  const dropHandler = useCallback(
+    ({ file, isAccepted }: { file: File; isAccepted: boolean }) => {
       if (!file) return;
 
       setFileUploaded({
@@ -55,25 +51,33 @@ const FileUpload: FC<FileUploadProps> = () => {
   );
 
   const saveFileHandler = async () => {
-
-    const obj = await readJsonFile(fileUploaded?.file!)
-  //@ts-ignore
-    console.log(snakizeData(obj, ["_id"]))
-      //@ts-ignore
-    createCustomersMutation(snakizeData(obj, ["_id"]))
+    const obj = await readJsonFile(fileUploaded?.file!);
+    //@ts-ignore
+    createCustomersMutation(snakizeData(obj, ['_id']));
   };
 
+  const goBackHandler = useCallback(() => {
+    navigate(-1);
+  }, [navigate]);
+
   return (
-    <div className="bg-white/30 max-w-screen-lg flex flex-col gap-7 shadow-lg w-full p-20 m-5 rounded-lg backdrop-filter backdrop-blur-lg border border-gray-300">
-    <Dropzone
-      onDrop={dropHandler}
-      onFileReject={dropHandler}
-      fileUploaded={fileUploaded}
-      acceptedFileExtentions={acceptedFileExtentions}
-      dropZoneMsgs={dropZoneMsgs}
-    />
-    {fileUploaded?.file && <Button className='self-end' onClick={saveFileHandler}>Save</Button>}
-    </div>
+    <Fragment>
+      <Dropzone
+        onDrop={dropHandler}
+        onFileReject={dropHandler}
+        fileUploaded={fileUploaded}
+        acceptedFileExtentions={acceptedFileExtentions}
+        dropZoneMsgs={dropZoneMsgs}
+      />
+      <div className="flex flex-row gap-4 justify-end">
+        <GoBackButton onClick={goBackHandler} />
+        {fileUploaded?.file && (
+          <Button className="self-end" onClick={saveFileHandler}>
+            Save
+          </Button>
+        )}
+      </div>
+    </Fragment>
   );
 };
 

@@ -11,7 +11,7 @@ const DropzoneContainer: FC<DropzoneContainerProps> = forwardRef(
         {children}
       </div>
     );
-  },
+  }
 );
 
 export default DropzoneContainer;

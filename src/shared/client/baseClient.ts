@@ -1,6 +1,9 @@
-import { RequestOptions } from "./baseClient.types";
+import { RequestOptions } from './baseClient.types';
 
-export async function request<T>(url: string, options: RequestOptions = {}): Promise<T> {
+export async function request<T>(
+  url: string,
+  options: RequestOptions = {}
+): Promise<T> {
   try {
     const response = await fetch(url, options);
 
@@ -9,7 +12,11 @@ export async function request<T>(url: string, options: RequestOptions = {}): Pro
       throw Object.assign(error, { response });
     }
 
-    const responseData = await response.json() as T;
+    if (response.status === 204) {
+      return {} as T;
+    }
+
+    const responseData = (await response.json()) as T;
     return responseData;
   } catch (error) {
     throw error;

@@ -6,11 +6,13 @@ import { LoadingSpinnerModalProps } from './loading.types';
 
 const LoadingSpinnerModal: FC<LoadingSpinnerModalProps> = ({ isLoading }) => {
   return (
-    <Modal isModal={isLoading} classVariant={ModalClassVariantEnum.middleCentered}>
+    <Modal
+      isModal={isLoading}
+      classVariant={ModalClassVariantEnum.middleCentered}
+    >
       <div className="z-50">
-              <LoadingSpinner />
-              </div>
-
+        <LoadingSpinner />
+      </div>
     </Modal>
   );
 };
